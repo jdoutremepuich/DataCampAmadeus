@@ -18,11 +18,11 @@ class FeatureExtractor(object):
         X_weather = X_weather.set_index(['DateOfDeparture', 'Arrival'])
         X_encoded = X_encoded.join(X_weather).reset_index()
         
-        data_holidays = pd.read_csv(os.path.join(path,"data_holidays.csv"))
-        X_holidays = data_holidays[['DateOfDeparture','Xmas','Xmas-1','NYD','NYD-1','Ind','Thg','Thg+1']]
-        X_encoded = X_encoded.set_index(['DateOfDeparture'])
-        X_holidays = X_holidays.set_index(['DateOfDeparture'])
-        X_encoded = X_encoded.join(X_holidays).reset_index()
+        #data_holidays = pd.read_csv(os.path.join(path,"data_holidays.csv"))
+        #X_holidays = data_holidays[['DateOfDeparture','Xmas','Xmas-1','NYD','NYD-1','Ind','Thg','Thg+1']]
+        #X_encoded = X_encoded.set_index(['DateOfDeparture'])
+        #X_holidays = X_holidays.set_index(['DateOfDeparture'])
+        #X_encoded = X_encoded.join(X_holidays).reset_index()
         
         # following http://stackoverflow.com/questions/16453644/regression-with-date-variable-using-scikit-learn
         X_encoded['DateOfDeparture'] = pd.to_datetime(X_encoded['DateOfDeparture'])
