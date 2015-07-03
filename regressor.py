@@ -2,8 +2,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import BaseEstimator
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor
-from sklearn.linear_model import LinearRegression
-
 import numpy as np
 
 class Regressor(BaseEstimator):
