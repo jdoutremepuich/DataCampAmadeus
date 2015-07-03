@@ -33,11 +33,11 @@ class FeatureExtractor(object):
         X_encoded['week'] = X_encoded['DateOfDeparture'].dt.week
         X_encoded['n_days'] = X_encoded['DateOfDeparture'].apply(lambda date: (date - pd.to_datetime("1970-01-01")).days)
         
-        X_encoded = X_encoded.join(pd.get_dummies(X_encoded['year'], prefix='y'))
+        #X_encoded = X_encoded.join(pd.get_dummies(X_encoded['year'], prefix='y'))
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['month'], prefix='m'))
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['day'], prefix='d'))
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['weekday'], prefix='wd'))
-        X_encoded = X_encoded.join(pd.get_dummies(X_encoded['week'], prefix='w'))
+        #X_encoded = X_encoded.join(pd.get_dummies(X_encoded['week'], prefix='w'))
         
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['Departure'], prefix='d'))
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['Arrival'], prefix='a'))
