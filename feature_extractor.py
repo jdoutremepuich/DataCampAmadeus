@@ -14,7 +14,7 @@ class FeatureExtractor(object):
         
         #uncomment the line below in the submission
         path = os.path.dirname(__file__)
-        special_days=pd.read_csv(os.path.name(path,"data_specialdays.csv"), sep = ';')
+        special_days=pd.read_csv(os.path.join(path,"data_specialdays.csv"), sep = ';')
         
         X_encoded = X_encoded.merge(special_days, how='left', left_on=['DateOfDeparture'], right_on=['DateOfDeparture'], sort=False)
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['Departure'], prefix='d'))
