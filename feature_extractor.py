@@ -22,15 +22,16 @@ class FeatureExtractor(object):
             'DateOfDeparture', 'Date', 'AirPort'], axis=1)
 
         
-        data_holidays = pd.read_csv(os.path.join(path,"data_holidays.csv"))
-        X_holidays = data_holidays[['DateOfDeparture','Xmas','Xmas-1','NYD','NYD-1','Ind','Thg','Thg+1']]
-        #X_encoded = X_encoded.set_index(['DateOfDeparture'])
-        #X_holidays = X_holidays.set_index(['DateOfDeparture'])
-        #X_encoded = X_encoded.join(X_holidays).reset_index()
-        X_encoded = X_encoded.left(X_holidays,how='left',
+        data_holidays = pd.read_csv(os.path.join(path,"data_specialdays.csv"))
+        X_holidays = data_holidays[['DateOfDeparture','NYE','PRESIDENTSDAY','EASTER','MEMORIAL DAY',
+                                    'INDEPENDANCEDAY','LABOURDAY','HALLOWEEN','TGV','XMAS','ISSPECIALDAY','ISAROUNDSPECIALDAY']]
+        X_encoded = X_encoded.merge(X_holidays,how='left',
             left_on=['DateOfDeparture'],
-            right_on=['DateOfDeparture','Xmas','Xmas-1','NYD','NYD-1','Ind','Thg','Thg+1'],sort=False)
+            right_on=['DateOfDeparture','NYE','PRESIDENTSDAY','EASTER','MEMORIAL DAY',
+                      'INDEPENDANCEDAY','LABOURDAY','HALLOWEEN','TGV','XMAS','ISSPECIALDAY','ISAROUNDSPECIALDAY'],sort=False)
         X_encoded = X_encoded.drop(['DateOfDeparture'])
+        X_encoded = X_encoded.drop(['ISSPECIALDAY'])
+        X_encoded = X_encoded.drop(['ISAROUNDSPECIALDAY'])
         
         # following http://stackoverflow.com/questions/16453644/regression-with-date-variable-using-scikit-learn
         X_encoded['DateOfDeparture'] = pd.to_datetime(X_encoded['DateOfDeparture'])
@@ -41,9 +42,9 @@ class FeatureExtractor(object):
         X_encoded['week'] = X_encoded['DateOfDeparture'].dt.week
         X_encoded['n_days'] = X_encoded['DateOfDeparture'].apply(lambda date: (date - pd.to_datetime("1970-01-01")).days)
         
-        #X_encoded = X_encoded.join(pd.get_dummies(X_encoded['year'], prefix='y'))
-        #X_encoded = X_encoded.join(pd.get_dummies(X_encoded['month'], prefix='m'))
-        #X_encoded = X_encoded.join(pd.get_dummies(X_encoded['day'], prefix='d'))
+        X_encoded = X_encoded.join(pd.get_dummies(X_encoded['year'], prefix='y'))
+        X_encoded = X_encoded.join(pd.get_dummies(X_encoded['month'], prefix='m'))
+        X_encoded = X_encoded.join(pd.get_dummies(X_encoded['day'], prefix='d'))
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['weekday'], prefix='wd'))
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['week'], prefix='w'))
         
@@ -51,7 +52,9 @@ class FeatureExtractor(object):
         X_encoded = X_encoded.join(pd.get_dummies(X_encoded['Arrival'], prefix='a'))
         X_encoded = X_encoded.drop('Departure', axis=1)
         X_encoded = X_encoded.drop('Arrival', axis=1)
-
+        X_encoded = X_encoded.drop('year',axis=1)
+        X_encoded = X_encoded.drop('month',axis =1)       
+        
         X_encoded = X_encoded.drop('DateOfDeparture', axis=1)
         X_array = X_encoded.values
         return X_array
